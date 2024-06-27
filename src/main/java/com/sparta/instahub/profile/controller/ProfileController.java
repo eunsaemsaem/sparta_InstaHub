@@ -5,12 +5,10 @@ import com.sparta.instahub.profile.dto.PasswordRequestDto;
 import com.sparta.instahub.profile.dto.PasswordResponseDto;
 import com.sparta.instahub.profile.dto.ProfileRequestDto;
 import com.sparta.instahub.profile.dto.ProfileResponseDto;
-import com.sparta.instahub.profile.entity.PasswordHistory;
 import com.sparta.instahub.profile.entity.Profile;
 import com.sparta.instahub.profile.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +30,6 @@ public class ProfileController {
                 updatedProfile.getIntroduction(),
                 "수정이 성공적으로되었습니다."
         );
-
         return ResponseEntity.ok(responseDto);
     }
 
@@ -42,5 +39,4 @@ public class ProfileController {
 
         return ResponseEntity.ok(profileService.updatePassword(requestDto));
     }
-
 }

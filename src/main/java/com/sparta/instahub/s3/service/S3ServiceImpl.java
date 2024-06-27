@@ -24,7 +24,7 @@ public class S3ServiceImpl implements S3Service {
     private String bucketName;
 
     // 파일을 S3에 업로드하고 파일 URL을 반환
-    public String uploadFile(MultipartFile file){
+    public String uploadFile(MultipartFile file) {
         try {
             String fileName = generateFileName(file.getOriginalFilename());
 
@@ -41,11 +41,11 @@ public class S3ServiceImpl implements S3Service {
             imageRepository.save(image);
 
             return fileUrl;
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new InaccessibleImageException("이미지를 업로드할 수 없습니다. " + e.getMessage());
         }
     }
+
     // 파일을 S3에서 삭제하고 데이터베이스에서도 삭제하는 메서드
     public void deleteFile(String fileUrl) {
         Image image = imageRepository.findByUrl(fileUrl);

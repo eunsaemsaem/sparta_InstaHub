@@ -9,9 +9,7 @@ public class CommentResponseDto {
     private String contents;
 
     public CommentResponseDto(Comment comment) {
-        this.id=comment.getId();
-        this.contents=comment.getContents();
-
-
+        this.id = comment.getId();
+        this.contents = comment.getContents();
     }
 }

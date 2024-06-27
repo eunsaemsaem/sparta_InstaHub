@@ -75,6 +75,7 @@ public class User extends BaseEntity {
         this.email = email;
         this.password = password;
     }
+
     // User와 PasswordHistroy는 1대다 관계
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PasswordHistory> passwordHistories; // 사용자가 작성한 비밀번호 목록
@@ -107,7 +108,7 @@ public class User extends BaseEntity {
     }
 
     // 비밀번호 업데이트
-    public void updatePassword(String password){
+    public void updatePassword(String password) {
         this.password = password;
     }
 

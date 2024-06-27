@@ -37,14 +37,15 @@ public class Profile {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public void updateIntroduction(String introduction){
+    public void updateIntroduction(String introduction) {
         this.introduction = introduction;
     }
 
-    public void updateAddress(String address){
+    public void updateAddress(String address) {
         this.address = address;
     }
-    public void updateEmail(String email){
+
+    public void updateEmail(String email) {
         this.email = email;
     }
 
@@ -55,6 +56,7 @@ public class Profile {
     public User findUser() {
         return user;
     }
+
     @Builder
     public Profile(String email, String introduction, String address, User user) {
         this.email = email;

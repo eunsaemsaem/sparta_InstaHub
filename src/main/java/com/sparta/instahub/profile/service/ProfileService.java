@@ -53,7 +53,7 @@ public class ProfileService {
     // password 수정
     public PasswordResponseDto updatePassword(PasswordRequestDto requestDto) throws BadRequestException {
         // 현재 사용자
-        Authentication loginUser =  SecurityContextHolder.getContext().getAuthentication();
+        Authentication loginUser = SecurityContextHolder.getContext().getAuthentication();
         String userName = loginUser.getName();
 
         User user = userRepository.findByUsername(userName).orElseThrow(
@@ -62,7 +62,6 @@ public class ProfileService {
 
         return passwordComparison(requestDto, user);
     }
-
 
     // password 수정
     public PasswordResponseDto passwordComparison(PasswordRequestDto requestDto, User user) {
@@ -79,22 +78,22 @@ public class ProfileService {
     }
 
     // 최근 비밀번호와 비교함
-    public void validatePassword(int idCount, String nowPassword, PasswordRequestDto requestDto, List<PasswordHistory> passwordHistories){
+    public void validatePassword(int idCount, String nowPassword, PasswordRequestDto requestDto, List<PasswordHistory> passwordHistories) {
         if (idCount == 0) {
-            if(passwordEncoder.matches(requestDto.getPassword(), nowPassword)){
+            if (passwordEncoder.matches(requestDto.getPassword(), nowPassword)) {
                 throw new IllegalArgumentException("비밀번호를 사용할 수 없습니다.");
             }
         } else if (idCount < 3) {
-            for(int i=0; i<idCount; i++){
+            for (int i = 0; i < idCount; i++) {
                 String oldPassword = passwordHistories.get(i).getPassword();
-                if(passwordEncoder.matches(requestDto.getPassword(), oldPassword) || passwordEncoder.matches(requestDto.getPassword(), nowPassword)){
+                if (passwordEncoder.matches(requestDto.getPassword(), oldPassword) || passwordEncoder.matches(requestDto.getPassword(), nowPassword)) {
                     throw new IllegalArgumentException("최근 변경된 비밀번호입니다. 새로운 비밀번호를 입력해주세요.");
                 }
             }
         } else {
-            for(int i=0; i<3; i++){
+            for (int i = 0; i < 3; i++) {
                 String oldPassword = passwordHistories.get(idCount - 1 - i).getPassword();
-                if(passwordEncoder.matches(requestDto.getPassword(), oldPassword) || passwordEncoder.matches(requestDto.getPassword(), nowPassword)){
+                if (passwordEncoder.matches(requestDto.getPassword(), oldPassword) || passwordEncoder.matches(requestDto.getPassword(), nowPassword)) {
                     throw new IllegalArgumentException("최근 변경된 비밀번호입니다. 새로운 비밀번호를 입력해주세요.");
                 }
             }

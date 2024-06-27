@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 // Post 엔티티에 대한 비즈니스 로직을 처리하는 서비스 클래스
@@ -69,27 +68,27 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public Post updatePost(Long id, String title, String content, MultipartFile image, String username) {
-       try {
-           // 현재 로그인된 사용자 가져오기
-           User currentUser = userService.getUserByName(username);
-           Post post = getPostById(id); // ID로 게시물 조회
+        try {
+            // 현재 로그인된 사용자 가져오기
+            User currentUser = userService.getUserByName(username);
+            Post post = getPostById(id); // ID로 게시물 조회
 
-           if (!post.getUser().equals(currentUser)) {
-               throw new UnauthorizedException("포스트 수정 권한이 없는 사용자 입니다.");
-           }
-           if (image != null && !image.isEmpty()) {
-               if (post.getImageUrl() != null) {
-                   s3Service.deleteFile(post.getImageUrl());
-               }
-               String imageUrl = s3Service.uploadFile(image);
-               post.update(title, content, imageUrl);
-           } else {
-               post.update(title, content, post.getImageUrl());
-           }
-           return postRepository.save(post);
-       } catch (InaccessiblePostException e) {
-           throw new InaccessiblePostException("포스트를 수정할 수 없습니다.");
-       }
+            if (!post.getUser().equals(currentUser)) {
+                throw new UnauthorizedException("포스트 수정 권한이 없는 사용자 입니다.");
+            }
+            if (image != null && !image.isEmpty()) {
+                if (post.getImageUrl() != null) {
+                    s3Service.deleteFile(post.getImageUrl());
+                }
+                String imageUrl = s3Service.uploadFile(image);
+                post.update(title, content, imageUrl);
+            } else {
+                post.update(title, content, post.getImageUrl());
+            }
+            return postRepository.save(post);
+        } catch (InaccessiblePostException e) {
+            throw new InaccessiblePostException("포스트를 수정할 수 없습니다.");
+        }
     }
 
     // 게시물 삭제
@@ -114,8 +113,8 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public void deleteAllPosts() {
         List<Post> posts = postRepository.findAll();
-        for(Post post: posts) {
-            if(post.getImageUrl() != null) {
+        for (Post post : posts) {
+            if (post.getImageUrl() != null) {
                 s3Service.deleteFile(post.getImageUrl());
             }
         }

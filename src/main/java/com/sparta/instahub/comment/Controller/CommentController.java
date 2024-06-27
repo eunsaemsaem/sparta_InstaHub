@@ -2,16 +2,11 @@ package com.sparta.instahub.comment.Controller;
 
 import com.sparta.instahub.comment.dto.CommentRequestDto;
 import com.sparta.instahub.comment.dto.CommentResponseDto;
-import com.sparta.instahub.comment.entity.Comment;
 import com.sparta.instahub.comment.service.CommentService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,8 +22,8 @@ public class CommentController {
     @PostMapping("/{postId}/comments")
     public CommentResponseDto createComment(@PathVariable Long postId,
                                             @RequestBody CommentRequestDto requestDto,
-                                            @AuthenticationPrincipal UserDetails userDetails){
-        return commentService.createComment(postId, requestDto,userDetails.getUsername());
+                                            @AuthenticationPrincipal UserDetails userDetails) {
+        return commentService.createComment(postId, requestDto, userDetails.getUsername());
     }
 
     //댓글 조회
@@ -42,17 +37,16 @@ public class CommentController {
     public CommentResponseDto updateComment(@PathVariable Long postId,
                                             @PathVariable Long commentId,
                                             @RequestBody CommentRequestDto requestDto,
-                                            @AuthenticationPrincipal UserDetails userDetails){
-        return commentService.updateComment(postId, requestDto,userDetails.getUsername());
+                                            @AuthenticationPrincipal UserDetails userDetails) {
+        return commentService.updateComment(postId, requestDto, userDetails.getUsername());
 
     }
-    //
+
     //댓글 삭제
     @DeleteMapping("/{postId}/comments/{commentId}")
     public ResponseEntity<String> deleteComment(@PathVariable Long commentId,
-                                                @AuthenticationPrincipal UserDetails userDetails){
+                                                @AuthenticationPrincipal UserDetails userDetails) {
         return commentService.deleteComment(commentId, userDetails.getUsername());
     }
-
 
 }

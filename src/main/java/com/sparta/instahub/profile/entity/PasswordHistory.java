@@ -29,7 +29,7 @@ public class PasswordHistory {
         this.user = user;
     }
 
-    public void setPassword(String password){
+    public void setPassword(String password) {
         this.password = password;
     }
 }

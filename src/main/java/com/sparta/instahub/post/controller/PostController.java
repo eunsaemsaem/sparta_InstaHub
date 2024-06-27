@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -26,6 +25,7 @@ public class PostController {
 
     /**
      * 모든 게시물 조회 요청 처리
+     *
      * @return
      */
     @GetMapping
@@ -83,7 +83,7 @@ public class PostController {
     public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long id,
                                                       @ModelAttribute PostRequestDto postRequestDto,
                                                       @AuthenticationPrincipal UserDetails userDetails) throws IOException {
-        Post post = postService.updatePost(id, postRequestDto.getTitle(), postRequestDto.getContent(),postRequestDto.getImage(), userDetails.getUsername());
+        Post post = postService.updatePost(id, postRequestDto.getTitle(), postRequestDto.getContent(), postRequestDto.getImage(), userDetails.getUsername());
         PostResponseDto postResponseDto = PostResponseDto.builder()
                 .id(post.getId())
                 .title(post.getTitle())

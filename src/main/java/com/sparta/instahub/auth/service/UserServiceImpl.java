@@ -8,10 +8,8 @@ import com.sparta.instahub.profile.dto.PasswordRequestDto;
 import com.sparta.instahub.profile.entity.PasswordHistory;
 import com.sparta.instahub.profile.entity.Profile;
 import com.sparta.instahub.profile.repository.PasswordHistoryRepository;
-import com.sparta.instahub.profile.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -244,7 +242,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User savePasswordHistory() {
-        Authentication loginUser =  SecurityContextHolder.getContext().getAuthentication(); // 로그인 된 사용자
+        Authentication loginUser = SecurityContextHolder.getContext().getAuthentication(); // 로그인 된 사용자
         String userName = loginUser.getName();
 
         User user = userRepository.findByUsername(userName).orElseThrow(
@@ -261,8 +259,8 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    public void updatePassword(PasswordRequestDto requestDto){
-        Authentication loginUser =  SecurityContextHolder.getContext().getAuthentication(); // 로그인 된 사용자
+    public void updatePassword(PasswordRequestDto requestDto) {
+        Authentication loginUser = SecurityContextHolder.getContext().getAuthentication(); // 로그인 된 사용자
         String userName = loginUser.getName();
 
         User user = userRepository.findByUsername(userName).orElseThrow(
@@ -273,6 +271,5 @@ public class UserServiceImpl implements UserService {
         user.updatePassword(encodedPassword);
         userRepository.save(user);
     }
-
 
 }
