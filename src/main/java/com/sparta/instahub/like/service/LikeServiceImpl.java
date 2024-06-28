@@ -11,9 +11,9 @@ import com.sparta.instahub.like.repository.PostLikeRepository;
 import com.sparta.instahub.post.entity.Post;
 import com.sparta.instahub.post.service.PostServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +26,7 @@ public class LikeServiceImpl implements LikeService {
     private final CommentLikeRepository commentLikeRepository;
 
     @Override
+    @Transactional
     public String addPostLike(Long postId, String username) {
         // user, post 찾기
         User user = userServiceImpl.getUserByName(username);
@@ -53,6 +54,7 @@ public class LikeServiceImpl implements LikeService {
     }
 
     @Override
+    @Transactional
     public String removePostLike(Long postId, UserDetails userDetails) {
         // postLike 찾기
         Post post = postServiceImpl.getPostById(postId);
@@ -71,6 +73,7 @@ public class LikeServiceImpl implements LikeService {
     }
 
     @Override
+    @Transactional
     public String addCommentLike(Long commentId, String username) {
         // user, post 찾기
         User user = userServiceImpl.getUserByName(username);
@@ -98,6 +101,7 @@ public class LikeServiceImpl implements LikeService {
     }
 
     @Override
+    @Transactional
     public String removeCommentLike(Long commentId, UserDetails userDetails) {
         // postLike 찾기
         Comment comment = commentService.findCommentById(commentId);
@@ -114,6 +118,4 @@ public class LikeServiceImpl implements LikeService {
 
         return "댓글 좋아요 취소";
     }
-
-
 }

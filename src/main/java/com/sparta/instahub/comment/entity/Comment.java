@@ -49,6 +49,9 @@ public class Comment extends BaseEntity {
     }
 
     public void removeLike() {
+        if (this.commentLike == 0) {
+            throw new IllegalArgumentException("좋아요를 취소할 수 없습니다.");
+        }
         this.commentLike = commentLike - 1L;
     }
 }
