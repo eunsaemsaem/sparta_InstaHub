@@ -26,15 +26,15 @@ public class LikeController {
 
     @DeleteMapping("/api/post/{postId}/like")
     public ResponseEntity<String> removePostLike(@PathVariable Long postId, @AuthenticationPrincipal UserDetails userDetails) {
-        likeService.removePostLike(postId, userDetails);
-        return ResponseEntity.status(HttpStatus.OK).body("게시물 좋아요 취소");
+        String result = likeService.removePostLike(postId, userDetails);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     //댓글 좋아요
     @PostMapping("/api/comment/{commentId}/like")
     public ResponseEntity<String> addCommentLike(@PathVariable Long commentId, @AuthenticationPrincipal UserDetails userDetails) {
-        likeService.addCommentLike(commentId, userDetails);
-        return ResponseEntity.status(HttpStatus.CREATED).body("댓글 좋아요 +1");
+        String result = likeService.addCommentLike(commentId, userDetails.getUsername());
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @DeleteMapping("/api/comment/{commentId}/like")

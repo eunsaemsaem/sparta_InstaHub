@@ -12,7 +12,7 @@ public interface LikeService {
     String removePostLike(Long postId, UserDetails userDetails);
 
     // 댓글 좋아요
-    ResponseEntity<String> addCommentLike(Long commentId, UserDetails userDetails);
+    String addCommentLike(Long commentId, String username);
 
     // 댓글 좋아요 취소
     ResponseEntity<String> removeCommentLike(Long commentId, UserDetails userDetails);

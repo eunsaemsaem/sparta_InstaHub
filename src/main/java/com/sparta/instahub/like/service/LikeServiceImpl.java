@@ -2,7 +2,11 @@ package com.sparta.instahub.like.service;
 
 import com.sparta.instahub.auth.entity.User;
 import com.sparta.instahub.auth.service.UserServiceImpl;
+import com.sparta.instahub.comment.entity.Comment;
+import com.sparta.instahub.comment.service.CommentService;
+import com.sparta.instahub.like.entity.CommentLike;
 import com.sparta.instahub.like.entity.PostLike;
+import com.sparta.instahub.like.repository.CommentLikeRepository;
 import com.sparta.instahub.like.repository.PostLikeRepository;
 import com.sparta.instahub.post.entity.Post;
 import com.sparta.instahub.post.service.PostServiceImpl;
@@ -17,7 +21,9 @@ public class LikeServiceImpl implements LikeService {
 
     private final UserServiceImpl userServiceImpl;
     private final PostServiceImpl postServiceImpl;
+    private final CommentService commentService;
     private final PostLikeRepository postLikeRepository;
+    private final CommentLikeRepository commentLikeRepository;
 
     @Override
     public String addPostLike(Long postId, String username) {
@@ -65,9 +71,30 @@ public class LikeServiceImpl implements LikeService {
     }
 
     @Override
-    public ResponseEntity<String> addCommentLike(Long commentId, UserDetails userDetails) {
-        return null;
+    public String addCommentLike(Long commentId, String username) {
+        // user, post 찾기
+        User user = userServiceImpl.getUserByName(username);
+        Comment comment = commentService.findCommentById(commentId);
 
+        // 자신이 작성한 글에 좋아요 불가능 (if문)
+        if (user.getId().equals(comment.getUser().getId())) {
+            throw new IllegalArgumentException("자신의 글에는 좋아요를 누를 수 없습니다.");
+        }
+
+        // 좋아요 추가
+        CommentLike commentLike = new CommentLike(user, comment);
+
+        // 이미 좋아요 누른 글인지 확인 (if문)
+//        if (postLikeRepository.findByUserAndPost(user, post).isPresent()) {
+//            throw new IllegalArgumentException("이미 좋아요를 누른 글입니다.");
+//        }
+        // 게시글에 addlike
+        comment.addLike();
+
+        // repository 저장
+        commentLikeRepository.save(commentLike);
+
+        return "댓글 좋아요 +1";
     }
 
     @Override

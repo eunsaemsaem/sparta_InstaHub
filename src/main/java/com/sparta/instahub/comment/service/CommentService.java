@@ -25,12 +25,13 @@ public class CommentService {
     private final UserService userService;
 
     //댓글 생성
-    public CommentResponseDto createComment(Long postId, CommentRequestDto requestDto, String username) {
+    public String createComment(Long postId, CommentRequestDto requestDto, String username) {
         Post post = findPostById(postId);
         User user = userService.getUserByName(username);
+
         Comment comment = new Comment(requestDto, post, user);
-        Comment savedComment = commentRepository.save(comment);
-        return new CommentResponseDto(comment);
+        commentRepository.save(comment);
+        return "create comment";
     }
 
     //댓글 조회
@@ -69,7 +70,7 @@ public class CommentService {
     }
 
     // id 존재 확인 메서드
-    private Comment findCommentById(Long id) {
+    public Comment findCommentById(Long id) {
         return commentRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 댓글을 찾을 수 없습니다."));
     }
@@ -80,5 +81,4 @@ public class CommentService {
                 new IllegalArgumentException("해당 게시물을 찾을 수 없습니다."));
 
     }
-
 }

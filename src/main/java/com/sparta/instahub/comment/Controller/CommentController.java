@@ -4,6 +4,7 @@ import com.sparta.instahub.comment.dto.CommentRequestDto;
 import com.sparta.instahub.comment.dto.CommentResponseDto;
 import com.sparta.instahub.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,10 +21,11 @@ public class CommentController {
 
     //댓글 작성
     @PostMapping("/{postId}/comments")
-    public CommentResponseDto createComment(@PathVariable Long postId,
+    public ResponseEntity<String> createComment(@PathVariable Long postId,
                                             @RequestBody CommentRequestDto requestDto,
                                             @AuthenticationPrincipal UserDetails userDetails) {
-        return commentService.createComment(postId, requestDto, userDetails.getUsername());
+        String result = commentService.createComment(postId, requestDto, userDetails.getUsername());
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     //댓글 조회

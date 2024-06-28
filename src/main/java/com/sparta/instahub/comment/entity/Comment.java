@@ -17,6 +17,9 @@ public class Comment extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "contents", nullable = false)
+    private String contents;
+
     //댓글이 달린 게시물
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = false)
@@ -26,16 +29,26 @@ public class Comment extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(name = "contents", nullable = false)
-    private String contents;
+    // 좋아요 수
+    @Column
+    private Long commentLike = 0L;
 
     public Comment(CommentRequestDto requestDto, Post post, User user) {
         this.contents = requestDto.getContents();
         this.post = post;
         this.user = user;
+        this.commentLike = 0L;
     }
 
     public void update(CommentRequestDto requestDto) {
         this.contents = requestDto.getContents();
+    }
+
+    public void addLike() {
+        this.commentLike = commentLike + 1L;
+    }
+
+    public void removeLike() {
+        this.commentLike = commentLike - 1L;
     }
 }
