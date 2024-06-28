@@ -6,14 +6,15 @@ import com.sparta.instahub.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Post extends BaseEntity {
-
 
     // 기본 키
     @Id
@@ -47,6 +48,9 @@ public class Post extends BaseEntity {
     @Column(nullable = false)
     private LocalDateTime updatedAt; // 수정일시
 
+    @Column
+    private Long postLike;
+
     //Comment Service 내 post.getComments 관련 - 게시물 삭제될 경우 게시물 내 모든 댓글 삭제
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     public List<Comment> getComments;
@@ -58,12 +62,9 @@ public class Post extends BaseEntity {
         this.title = title;
         this.content = content;
         this.imageUrl = imageUrl;
+        this.postLike = 0L;
         this.createdAt = LocalDateTime.now(); // 현재 시간을 생성일시로 설정
         this.updatedAt = LocalDateTime.now(); // 현재 시간을 수정일시로 설정
-    }
-
-    public Post() {
-
     }
 
     // 게시물 업데이트 메서드
@@ -72,6 +73,14 @@ public class Post extends BaseEntity {
         this.content = content;
         this.imageUrl = imageUrl;
         this.updatedAt = LocalDateTime.now(); // 현재 시간을 수정일시로 설정
+    }
+
+    // 좋아요 추가 메서드
+    public void addLike() {
+        if (this.postLike == null) {
+            this.postLike = 0L;
+        }
+        this.postLike = postLike + 1L;
     }
 
 }

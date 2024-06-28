@@ -38,8 +38,6 @@ public class PostController {
                         .content(post.getContent())
                         .author(post.getUser().getUsername())
                         .imageUrl(post.getImageUrl())
-                        .createdAt(post.getCreatedAt())
-                        .updatedAt(post.getUpdatedAt())
                         .build())
                 .collect(Collectors.toList());
         return new ResponseEntity<>(postResponseDtos, HttpStatus.OK);
@@ -55,8 +53,6 @@ public class PostController {
                 .content(post.getContent())
                 .author(post.getUser().getUsername())
                 .imageUrl(post.getImageUrl())
-                .createdAt(post.getCreatedAt())
-                .updatedAt(post.getUpdatedAt())
                 .build();
         return new ResponseEntity<>(postResponseDto, HttpStatus.OK);
     }
@@ -72,8 +68,6 @@ public class PostController {
                 .content(post.getContent())
                 .author(post.getUser().getUsername())
                 .imageUrl(post.getImageUrl())
-                .createdAt(post.getCreatedAt())
-                .updatedAt(post.getUpdatedAt())
                 .build();
         return new ResponseEntity<>(postResponseDto, HttpStatus.CREATED);
     }
@@ -90,8 +84,6 @@ public class PostController {
                 .content(post.getContent())
                 .author(post.getUser().getUsername())
                 .imageUrl(post.getImageUrl())
-                .createdAt(post.getCreatedAt())
-                .updatedAt(post.getUpdatedAt())
                 .build();
         return new ResponseEntity<>(postResponseDto, HttpStatus.OK);
     }

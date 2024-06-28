@@ -20,8 +20,8 @@ public class LikeController {
     // 게시글 좋아요
     @PostMapping("/api/post/{postId}/like")
     public ResponseEntity<String> addPostLike(@PathVariable Long postId, @AuthenticationPrincipal UserDetails userDetails) {
-        likeService.addPostLike(postId, userDetails);
-        return ResponseEntity.status(HttpStatus.CREATED).body("게시물 좋아요 +1");
+        String result = likeService.addPostLike(postId, userDetails.getUsername());
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @DeleteMapping("/api/post/{postId}/like")

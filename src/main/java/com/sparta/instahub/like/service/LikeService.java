@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public interface LikeService {
 
     // 게시글 좋아요
-    ResponseEntity<String> addPostLike(Long postId, UserDetails userDetails);
+    String addPostLike(Long postId, String username);
 
     // 게시글 좋아요 취소
     ResponseEntity<String> removePostLike(Long postId, UserDetails userDetails);

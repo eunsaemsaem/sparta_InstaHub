@@ -79,8 +79,6 @@ public class AdminController {
                 .content(post.getContent())
                 .author(post.getUser().getUsername())
                 .imageUrl(post.getImageUrl())
-                .createdAt(post.getCreatedAt())
-                .updatedAt(post.getUpdatedAt())
                 .build();
         return new ResponseEntity<>(postResponseDto, HttpStatus.CREATED);
     }
