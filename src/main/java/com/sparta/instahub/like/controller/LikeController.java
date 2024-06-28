@@ -39,7 +39,7 @@ public class LikeController {
 
     @DeleteMapping("/api/comment/{commentId}/like")
     public ResponseEntity<String> removeCommentLike(@PathVariable Long commentId, @AuthenticationPrincipal UserDetails userDetails) {
-        likeService.removeCommentLike(commentId, userDetails);
-        return ResponseEntity.status(HttpStatus.OK).body("댓글 좋아요 취소");
+        String result = likeService.removeCommentLike(commentId, userDetails);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 }

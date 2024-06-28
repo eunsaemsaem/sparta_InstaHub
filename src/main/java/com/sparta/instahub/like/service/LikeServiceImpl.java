@@ -98,9 +98,21 @@ public class LikeServiceImpl implements LikeService {
     }
 
     @Override
-    public ResponseEntity<String> removeCommentLike(Long commentId, UserDetails userDetails) {
-        return null;
+    public String removeCommentLike(Long commentId, UserDetails userDetails) {
+        // postLike 찾기
+        Comment comment = commentService.findCommentById(commentId);
+        CommentLike commentLike = commentLikeRepository.findByComment(comment);
 
+        // 본인 확인
+        if (!(userDetails.getUsername().equals(commentLike.getUser().getUsername()))) {
+            throw new IllegalArgumentException("다른 사람의 좋아요를 삭제할 수 없습니다.");
+        }
+
+        // 디비 삭제, postLike -1
+        commentLikeRepository.delete(commentLike);
+        comment.removeLike();
+
+        return "댓글 좋아요 취소";
     }
 
 

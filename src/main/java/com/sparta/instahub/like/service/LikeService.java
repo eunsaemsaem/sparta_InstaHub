@@ -15,5 +15,5 @@ public interface LikeService {
     String addCommentLike(Long commentId, String username);
 
     // 댓글 좋아요 취소
-    ResponseEntity<String> removeCommentLike(Long commentId, UserDetails userDetails);
+    String removeCommentLike(Long commentId, UserDetails userDetails);
 }
