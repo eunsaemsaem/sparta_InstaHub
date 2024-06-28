@@ -9,7 +9,7 @@ public interface LikeService {
     String addPostLike(Long postId, String username);
 
     // 게시글 좋아요 취소
-    ResponseEntity<String> removePostLike(Long postId, UserDetails userDetails);
+    String removePostLike(Long postId, UserDetails userDetails);
 
     // 댓글 좋아요
     ResponseEntity<String> addCommentLike(Long commentId, UserDetails userDetails);

@@ -47,9 +47,21 @@ public class LikeServiceImpl implements LikeService {
     }
 
     @Override
-    public ResponseEntity<String> removePostLike(Long postId, UserDetails userDetails) {
-        return null;
+    public String removePostLike(Long postId, UserDetails userDetails) {
+        // postLike 찾기
+        Post post = postServiceImpl.getPostById(postId);
+        PostLike postLike = postLikeRepository.findByPost(post);
 
+        // 본인 확인
+        if (!(userDetails.getUsername().equals(postLike.getUser().getUsername()))) {
+            throw new IllegalArgumentException("다른 사람의 좋아요를 삭제할 수 없습니다.");
+        }
+
+        // 디비 삭제, postLike -1
+        postLikeRepository.delete(postLike);
+        post.removeLike();
+
+        return "게시글 좋아요 취소";
     }
 
     @Override

@@ -83,4 +83,8 @@ public class Post extends BaseEntity {
         this.postLike = postLike + 1L;
     }
 
+    public void removeLike() {
+        this.postLike = postLike - 1L;
+    }
+
 }
