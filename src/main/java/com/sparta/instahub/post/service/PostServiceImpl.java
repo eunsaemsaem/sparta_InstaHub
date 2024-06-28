@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-// Post 엔티티에 대한 비즈니스 로직을 처리하는 서비스 클래스
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
@@ -24,7 +23,29 @@ public class PostServiceImpl implements PostService {
     private final UserServiceImpl userService;
     private final S3Service s3Service;
 
-    // 모든 게시물 조회
+    /**
+     * 새 게시물 생성 */
+    @Override
+    @Transactional
+    public Post createPost(String title, String content, MultipartFile image, String username) {
+        try {
+            // 현재 로그인된 사용자 가져오기
+            User user = userService.getUserByName(username);
+
+            String imageUrl = null;
+            if (image != null && !image.isEmpty()) {
+                imageUrl = s3Service.uploadFile(image);
+            }
+            Post post = new Post(user, title, content, imageUrl);
+
+            return postRepository.save(post); // Post 객체 저장
+        } catch (InaccessiblePostException e) {
+            throw new InaccessiblePostException("포스트를 생성할 수 없습니다.");
+        }
+    }
+
+    /**
+     * 게시물 조회 */
     @Override
     @Transactional(readOnly = true)
     public List<Post> getAllPosts() {
@@ -39,32 +60,8 @@ public class PostServiceImpl implements PostService {
                 new InaccessiblePostException("Invalid post ID"));
     }
 
-    // 새 게시물 생성
-    @Override
-    @Transactional
-    public Post createPost(String title, String content, MultipartFile image, String username) {
-        try {
-            // 현재 로그인된 사용자 가져오기
-            User user = userService.getUserByName(username);
-
-            String imageUrl = null;
-            if (image != null && !image.isEmpty()) {
-                imageUrl = s3Service.uploadFile(image);
-            }
-            Post post = Post.builder()
-                    .user(user)
-                    .title(title)
-                    .content(content)
-                    .imageUrl(imageUrl)
-                    .build();
-
-            return postRepository.save(post); // Post 객체 저장
-        } catch (InaccessiblePostException e) {
-            throw new InaccessiblePostException("포스트를 생성할 수 없습니다.");
-        }
-    }
-
-    // 게시물 수정
+    /**
+     * 게시물 수정 */
     @Override
     @Transactional
     public Post updatePost(Long id, String title, String content, MultipartFile image, String username) {
@@ -91,7 +88,8 @@ public class PostServiceImpl implements PostService {
         }
     }
 
-    // 게시물 삭제
+    /**
+     * 게시물 삭제 */
     @Override
     @Transactional
     public void deletePost(Long id, String username) {

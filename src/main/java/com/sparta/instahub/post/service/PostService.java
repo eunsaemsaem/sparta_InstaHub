@@ -9,18 +9,23 @@ import java.util.List;
 
 public interface PostService {
 
+    /**
+     * 새 게시물 생성 */
+    Post createPost(String title, String content, MultipartFile imageUrl, String username);
+
+    /**
+     * 게시물 조회 */
     List<Post> getAllPosts();
 
     // ID로 게시물 조회
     Post getPostById(Long id);
 
-    // 새 게시물 생성
-    Post createPost(String title, String content, MultipartFile imageUrl, String username);
-
-    // 게시물 수정
+    /**
+     * 게시물 수정 */
     Post updatePost(Long id, String title, String content, MultipartFile imageUrl, String username);
 
-    // 게시물 삭제
+    /**
+     * 게시물 삭제 */
     void deletePost(Long id, String username);
 
     // 모든 게시물 삭제

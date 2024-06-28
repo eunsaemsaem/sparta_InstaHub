@@ -4,11 +4,9 @@ import com.sparta.instahub.auth.entity.User;
 import com.sparta.instahub.comment.entity.Comment;
 import com.sparta.instahub.common.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -38,16 +36,7 @@ public class Post extends BaseEntity {
     @Column
     private String imageUrl;
 
-    //게시물에 달린 댓글 목록
-    @OneToMany(mappedBy = "post")
-    private List<Comment> comments;
-
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt; // 생성일시
-
-    @Column(nullable = false)
-    private LocalDateTime updatedAt; // 수정일시
-
+    // 게시글의 좋아요 수
     @Column
     private Long postLike;
 
@@ -56,15 +45,13 @@ public class Post extends BaseEntity {
     public List<Comment> getComments;
 
     // 빌더 패턴을 사용한 생성자
-    @Builder
+//    @Builder
     public Post(User user, String title, String content, String imageUrl) {
         this.user = user;
         this.title = title;
         this.content = content;
         this.imageUrl = imageUrl;
         this.postLike = 0L;
-        this.createdAt = LocalDateTime.now(); // 현재 시간을 생성일시로 설정
-        this.updatedAt = LocalDateTime.now(); // 현재 시간을 수정일시로 설정
     }
 
     // 게시물 업데이트 메서드
@@ -72,7 +59,6 @@ public class Post extends BaseEntity {
         this.title = title;
         this.content = content;
         this.imageUrl = imageUrl;
-        this.updatedAt = LocalDateTime.now(); // 현재 시간을 수정일시로 설정
     }
 
     // 좋아요 추가 메서드
@@ -83,8 +69,8 @@ public class Post extends BaseEntity {
         this.postLike = postLike + 1L;
     }
 
+    // 좋아요 삭제 메서드
     public void removeLike() {
         this.postLike = postLike - 1L;
     }
-
 }
