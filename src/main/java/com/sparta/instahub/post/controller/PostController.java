@@ -24,10 +24,33 @@ public class PostController {
     private final PostService postService;
 
     /**
-     * 모든 게시물 조회 요청 처리
+     * 게시물 생성
+     *
+     * @param postRequestDto
+     * @param userDetails
+     * @return
+     * @throws IOException
+     */
+    @PostMapping
+    public ResponseEntity<PostResponseDto> createPost(@ModelAttribute PostRequestDto postRequestDto,
+                                                      @AuthenticationPrincipal UserDetails userDetails) throws IOException {
+        Post post = postService.createPost(postRequestDto.getTitle(), postRequestDto.getContent(), postRequestDto.getImage(), userDetails.getUsername());
+        PostResponseDto postResponseDto = PostResponseDto.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .author(post.getUser().getUsername())
+                .imageUrl(post.getImageUrl())
+                .build();
+        return new ResponseEntity<>(postResponseDto, HttpStatus.CREATED);
+    }
+
+    /**
+     * 게시물 조회
      *
      * @return
      */
+    /* 전체 조회 */
     @GetMapping
     public ResponseEntity<List<PostResponseDto>> getAllPosts() {
         List<Post> posts = postService.getAllPosts();
@@ -43,7 +66,7 @@ public class PostController {
         return new ResponseEntity<>(postResponseDtos, HttpStatus.OK);
     }
 
-    // ID로 게시물 조회 요청 처리
+    /* 단건 조회 */
     @GetMapping("/{id}")
     public ResponseEntity<PostResponseDto> getPostById(@PathVariable Long id) {
         Post post = postService.getPostById(id);
@@ -57,22 +80,15 @@ public class PostController {
         return new ResponseEntity<>(postResponseDto, HttpStatus.OK);
     }
 
-    // 새 게시물 생성 요청 처리
-    @PostMapping
-    public ResponseEntity<PostResponseDto> createPost(@ModelAttribute PostRequestDto postRequestDto,
-                                                      @AuthenticationPrincipal UserDetails userDetails) throws IOException {
-        Post post = postService.createPost(postRequestDto.getTitle(), postRequestDto.getContent(), postRequestDto.getImage(), userDetails.getUsername());
-        PostResponseDto postResponseDto = PostResponseDto.builder()
-                .id(post.getId())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .author(post.getUser().getUsername())
-                .imageUrl(post.getImageUrl())
-                .build();
-        return new ResponseEntity<>(postResponseDto, HttpStatus.CREATED);
-    }
-
-    // 게시물 수정 요청 처리
+    /**
+     * 게시물 수정
+     *
+     * @param id
+     * @param postRequestDto
+     * @param userDetails
+     * @return
+     * @throws IOException
+     */
     @PatchMapping("/{id}")
     public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long id,
                                                       @ModelAttribute PostRequestDto postRequestDto,
@@ -88,8 +104,13 @@ public class PostController {
         return new ResponseEntity<>(postResponseDto, HttpStatus.OK);
     }
 
-
-    // 게시물 삭제 요청 처리
+    /**
+     * 게시물 삭제
+     *
+     * @param id
+     * @param userDetails
+     * @return
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePost(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         postService.deletePost(id, userDetails.getUsername()); // 게시물 삭제
