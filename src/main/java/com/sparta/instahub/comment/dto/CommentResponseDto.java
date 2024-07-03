@@ -12,4 +12,9 @@ public class CommentResponseDto {
         this.id = comment.getId();
         this.contents = comment.getContents();
     }
+
+    public CommentResponseDto(Long id, String contents) {
+        this.id = id;
+        this.contents = contents;
+    }
 }
