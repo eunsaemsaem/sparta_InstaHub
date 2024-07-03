@@ -20,6 +20,9 @@ public interface PostService {
     // ID로 게시물 조회
     Post getPostById(Long id);
 
+    // 내가 좋아요 한 게시물 조회
+    List<Post> getMyLikePost(String username);
+
     /**
      * 게시물 수정 */
     Post updatePost(Long id, String title, String content, MultipartFile imageUrl, String username);
@@ -30,4 +33,5 @@ public interface PostService {
 
     // 모든 게시물 삭제
     void deleteAllPosts();
+
 }

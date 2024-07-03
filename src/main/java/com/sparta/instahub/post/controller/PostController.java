@@ -80,6 +80,22 @@ public class PostController {
         return new ResponseEntity<>(postResponseDto, HttpStatus.OK);
     }
 
+    /* 내가 좋아요 한 게시글 조회 */
+    @GetMapping("/mylike")
+    public ResponseEntity<List<PostResponseDto>> getMyLikePost (@AuthenticationPrincipal UserDetails userDetails) {
+        List<Post> posts = postService.getMyLikePost(userDetails.getUsername());
+        List<PostResponseDto> postResponseDtos = posts.stream()
+                .map(post -> PostResponseDto.builder()
+                        .id(post.getId())
+                        .title(post.getTitle())
+                        .content(post.getContent())
+                        .author(post.getUser().getUsername())
+                        .imageUrl(post.getImageUrl())
+                        .build())
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(postResponseDtos, HttpStatus.OK);
+    }
+
     /**
      * 게시물 수정
      *

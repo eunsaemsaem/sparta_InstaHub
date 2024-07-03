@@ -5,6 +5,8 @@ import com.sparta.instahub.auth.entity.UserRole;
 import com.sparta.instahub.auth.service.UserServiceImpl;
 import com.sparta.instahub.exception.InaccessiblePostException;
 import com.sparta.instahub.exception.UnauthorizedException;
+import com.sparta.instahub.like.entity.PostLike;
+import com.sparta.instahub.like.repository.PostLikeRepository;
 import com.sparta.instahub.post.entity.Post;
 import com.sparta.instahub.post.repository.PostRepository;
 import com.sparta.instahub.s3.service.S3Service;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +25,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final UserServiceImpl userService;
     private final S3Service s3Service;
+    private final PostLikeRepository postLikeRepository;
 
     /**
      * 새 게시물 생성 */
@@ -58,6 +62,22 @@ public class PostServiceImpl implements PostService {
     public Post getPostById(Long id) {
         return postRepository.findById(id).orElseThrow(() ->
                 new InaccessiblePostException("Invalid post ID"));
+    }
+
+    // 내가 좋아요 한 게시물 조회
+    @Override
+    @Transactional(readOnly = true)
+    public List<Post> getMyLikePost(String username) {
+        User user = userService.getUserByName(username);
+        Long userId = user.getId();
+
+        // userId로 모든 PostLike 엔티티를 가져옴
+        List<PostLike> postLikes = postLikeRepository.findByUserId(userId);
+
+        // 각 PostLike 엔티티에서 Post 객체를 추출하여 리스트로 반환
+        return postLikes.stream()
+                .map(PostLike::getPost)
+                .collect(Collectors.toList());
     }
 
     /**
