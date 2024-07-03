@@ -24,8 +24,8 @@ public class CommentController {
     //댓글 작성
     @PostMapping
     public ResponseEntity<String> createComment(@PathVariable Long postId,
-                                            @RequestBody CommentRequestDto requestDto,
-                                            @AuthenticationPrincipal UserDetails userDetails) {
+                                                @RequestBody CommentRequestDto requestDto,
+                                                @AuthenticationPrincipal UserDetails userDetails) {
         String result = commentService.createComment(postId, requestDto, userDetails.getUsername());
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
@@ -38,9 +38,9 @@ public class CommentController {
 
     //내가 좋아요 한 댓글 조회
     @GetMapping("/mylike")
-    public ResponseEntity<List<CommentResponseDto>> getMyLikeComment (@AuthenticationPrincipal UserDetails userDetails,
-                                                                      @RequestParam(value = "page") int page) {
-        List<Comment> comments = commentService.getMyLikeComment(userDetails.getUsername(), page-1);
+    public ResponseEntity<List<CommentResponseDto>> getMyLikeComment(@AuthenticationPrincipal UserDetails userDetails,
+                                                                     @RequestParam(value = "page") int page) {
+        List<Comment> comments = commentService.getMyLikeComment(userDetails.getUsername(), page - 1);
         List<CommentResponseDto> commentResponseDtos = comments.stream()
                 .map(comment -> new CommentResponseDto(comment.getId(), comment.getContents()))
                 .collect(Collectors.toList());
