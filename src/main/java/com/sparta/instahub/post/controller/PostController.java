@@ -82,8 +82,10 @@ public class PostController {
 
     /* 내가 좋아요 한 게시글 조회 */
     @GetMapping("/mylike")
-    public ResponseEntity<List<PostResponseDto>> getMyLikePost (@AuthenticationPrincipal UserDetails userDetails) {
-        List<Post> posts = postService.getMyLikePost(userDetails.getUsername());
+    public ResponseEntity<List<PostResponseDto>> getMyLikePost (@AuthenticationPrincipal UserDetails userDetails,
+                                                                @RequestParam (value = "page") int page,
+                                                                @RequestParam(required = false, defaultValue = "createAt", value = "sortBy") String sortBy) {
+        List<Post> posts = postService.getMyLikePost(userDetails.getUsername(), page-1, sortBy);
         List<PostResponseDto> postResponseDtos = posts.stream()
                 .map(post -> PostResponseDto.builder()
                         .id(post.getId())

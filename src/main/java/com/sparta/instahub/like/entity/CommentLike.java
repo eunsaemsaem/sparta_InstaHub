@@ -2,6 +2,7 @@ package com.sparta.instahub.like.entity;
 
 import com.sparta.instahub.auth.entity.User;
 import com.sparta.instahub.comment.entity.Comment;
+import com.sparta.instahub.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table
 @NoArgsConstructor
-public class CommentLike {
+public class CommentLike extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

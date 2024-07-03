@@ -11,6 +11,9 @@ import com.sparta.instahub.post.entity.Post;
 import com.sparta.instahub.post.repository.PostRepository;
 import com.sparta.instahub.s3.service.S3Service;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -67,12 +70,15 @@ public class PostServiceImpl implements PostService {
     // 내가 좋아요 한 게시물 조회
     @Override
     @Transactional(readOnly = true)
-    public List<Post> getMyLikePost(String username) {
+    public List<Post> getMyLikePost(String username, int page, String sortBy) {
+        Sort sort = Sort.by(Sort.Direction.DESC, sortBy);
+        Pageable pageable = PageRequest.of(page, 5, sort);
+
         User user = userService.getUserByName(username);
         Long userId = user.getId();
 
         // userId로 모든 PostLike 엔티티를 가져옴
-        List<PostLike> postLikes = postLikeRepository.findByUserId(userId);
+        List<PostLike> postLikes = postLikeRepository.findByUserId(userId, pageable);
 
         // 각 PostLike 엔티티에서 Post 객체를 추출하여 리스트로 반환
         return postLikes.stream()

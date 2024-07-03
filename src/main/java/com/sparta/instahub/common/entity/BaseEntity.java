@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public abstract class BaseEntity {
 
     // 엔티티 생성 시점 저장
-    @Column(name = "create_at", nullable = false, updatable = false)
+    @Column(name = "createAt", nullable = false, updatable = false)
     private LocalDateTime createAt;
 
     // 엔티티 마지막 수정 시점 저장
