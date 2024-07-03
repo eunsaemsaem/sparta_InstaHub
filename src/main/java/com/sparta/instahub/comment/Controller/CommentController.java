@@ -39,9 +39,8 @@ public class CommentController {
     //내가 좋아요 한 댓글 조회
     @GetMapping("/mylike")
     public ResponseEntity<List<CommentResponseDto>> getMyLikeComment (@AuthenticationPrincipal UserDetails userDetails,
-                                                                      @RequestParam(value = "page") int page,
-                                                                      @RequestParam(required = false, defaultValue = "createAt", value = "sortBy") String sortBy) {
-        List<Comment> comments = commentService.getMyLikeComment(userDetails.getUsername(), page-1, sortBy);
+                                                                      @RequestParam(value = "page") int page) {
+        List<Comment> comments = commentService.getMyLikeComment(userDetails.getUsername(), page-1);
         List<CommentResponseDto> commentResponseDtos = comments.stream()
                 .map(comment -> new CommentResponseDto(comment.getId(), comment.getContents()))
                 .collect(Collectors.toList());

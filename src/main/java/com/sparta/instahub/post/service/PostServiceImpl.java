@@ -70,8 +70,8 @@ public class PostServiceImpl implements PostService {
     // 내가 좋아요 한 게시물 조회
     @Override
     @Transactional(readOnly = true)
-    public List<Post> getMyLikePost(String username, int page, String sortBy) {
-        Sort sort = Sort.by(Sort.Direction.DESC, sortBy);
+    public List<Post> getMyLikePost(String username, int page) {
+        Sort sort = Sort.by(Sort.Direction.DESC);
         Pageable pageable = PageRequest.of(page, 5, sort);
 
         User user = userService.getUserByName(username);

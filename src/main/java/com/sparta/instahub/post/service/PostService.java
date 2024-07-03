@@ -21,7 +21,7 @@ public interface PostService {
     Post getPostById(Long id);
 
     // 내가 좋아요 한 게시물 조회
-    List<Post> getMyLikePost(String username, int page, String sortBy);
+    List<Post> getMyLikePost(String username, int page);
 
     /**
      * 게시물 수정 */
