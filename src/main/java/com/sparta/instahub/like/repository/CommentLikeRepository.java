@@ -13,4 +13,6 @@ public interface CommentLikeRepository extends JpaRepository<CommentLike, Long> 
     CommentLike findByComment(Comment comment);
 
     List<CommentLike> findByUserId(Long userId, Pageable pageable);
+
+    List<CommentLike> findByUserId(Long userId);
 }

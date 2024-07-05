@@ -3,9 +3,14 @@ package com.sparta.instahub.profile.service;
 import com.sparta.instahub.auth.entity.User;
 import com.sparta.instahub.auth.repository.UserRepository;
 import com.sparta.instahub.auth.service.UserService;
+import com.sparta.instahub.like.entity.CommentLike;
+import com.sparta.instahub.like.entity.PostLike;
+import com.sparta.instahub.like.repository.CommentLikeRepository;
+import com.sparta.instahub.like.repository.PostLikeRepository;
 import com.sparta.instahub.profile.dto.PasswordRequestDto;
 import com.sparta.instahub.profile.dto.PasswordResponseDto;
 import com.sparta.instahub.profile.dto.ProfileRequestDto;
+import com.sparta.instahub.profile.dto.ProfileResponseDto;
 import com.sparta.instahub.profile.entity.PasswordHistory;
 import com.sparta.instahub.profile.entity.Profile;
 import com.sparta.instahub.profile.repository.PasswordHistoryRepository;
@@ -13,6 +18,7 @@ import com.sparta.instahub.profile.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +36,8 @@ public class ProfileService {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final PostLikeRepository postLikeRepository;
+    private final CommentLikeRepository commentLikeRepository;
 
     // 프로필 수정
     @Transactional
@@ -98,5 +106,32 @@ public class ProfileService {
                 }
             }
         }
+    }
+
+    public Profile getProfile(String username) {
+        User user = userService.getUserByName(username);
+        Long userId = user.getId();
+
+        Profile profile = profileRepository.findByUser_Id(userId).orElseThrow(
+                () -> new IllegalArgumentException("존재하지 않는 사용자입니다.")
+        );
+
+        return profile;
+    }
+
+    public int getPostLike(String username) {
+        User user = userService.getUserByName(username);
+        Long userid = user.getId();
+
+        List<PostLike> findPostLike = postLikeRepository.findByUserId(userid);
+        return findPostLike.size();
+    }
+
+    public int getCommentLike(String username) {
+        User user = userService.getUserByName(username);
+        Long userid = user.getId();
+
+        List<CommentLike> findCommentLike = commentLikeRepository.findByUserId(userid);
+        return findCommentLike.size();
     }
 }
